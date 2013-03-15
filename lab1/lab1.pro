@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
+QMAKE_CXXFLAGS += -O2 -Wall -Wextra -pedantic
 
 QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.7
 
