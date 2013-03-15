@@ -1,15 +1,17 @@
 #ifndef GRONSFELD_H
 #define GRONSFELD_H
 #include <string>
-#include <vector>
+#include <list>
 
-#define CipherType std::vector<unsigned int>
+#define CipherType std::list<unsigned int>
 
 class gronsfeld
 {
 		std::string m_decodedMessage;
 		std::string m_encodedMessage;
 		CipherType m_cipher;
+
+		inline void checkCipherPosition(CipherType::const_iterator& it);
 	public:
 		gronsfeld();
 

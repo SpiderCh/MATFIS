@@ -1,5 +1,12 @@
 #include "gronsfeld.h"
 
+inline void gronsfeld::checkCipherPosition(CipherType::const_iterator& it)
+{
+	if(m_cipher.cend() == it){
+		it = m_cipher.cbegin();
+	}
+}
+
 gronsfeld::gronsfeld()
 {
 }
@@ -46,24 +53,19 @@ bool gronsfeld::encode()
 	if(m_decodedMessage.empty())
 		return false;
 
-	const size_t size = m_decodedMessage.size();
-	const size_t cipherSize = m_cipher.size();
-
 	const char* symbol = m_decodedMessage.c_str();
 
-	for(size_t index = 0, cipherIndex = 0; size != index; ++symbol, ++index, ++cipherIndex){
-		if(cipherSize == cipherIndex){
-			cipherIndex = 0;
-		}
+	for(CipherType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
+		checkCipherPosition(it);
 		/*
 		 * In Unicode cyrillic symbols coded by 2 bytes.
 		 * Skip firt and encode second one. If we encode
 		 * first byte we get garbage in string
 		 */
 		if(*symbol < 0){
-			m_encodedMessage.push_back(*symbol);
+			m_encodedMessage.push_back(*symbol++);
 		}
-		m_encodedMessage.push_back(*symbol + m_cipher[cipherIndex]);
+		m_encodedMessage.push_back(*symbol++ + *it);
 	}
 	return true;
 }
@@ -75,24 +77,19 @@ bool gronsfeld::decode()
 	if(m_encodedMessage.empty())
 		return false;
 
-	const size_t size = m_encodedMessage.size();
-	const size_t cipherSize = m_cipher.size();
-
 	const char* symbol = m_encodedMessage.c_str();
 
-	for(size_t index = 0, cipherIndex = 0; size != index; ++symbol, ++index, ++cipherIndex){
-		if(cipherSize == cipherIndex){
-			cipherIndex = 0;
-		}
+	for(CipherType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
+		checkCipherPosition(it);
 		/*
 		 * In Unicode cyrillic symbols coded by 2 bytes.
 		 * Skip firt and encode second one. If we encode
 		 * first byte we get garbage in string
 		 */
 		if(*symbol < 0){
-			m_decodedMessage.push_back(*symbol);
+			m_decodedMessage.push_back(*symbol++);
 		}
-		m_decodedMessage.push_back(*symbol - m_cipher[cipherIndex]);
+		m_decodedMessage.push_back(*symbol++ - *it);
 	}
 	return true;
 }
