@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
+
 QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.7
 
 QMAKE_CXXFLAGS += -DDEBUG
@@ -17,8 +19,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    gronsfeld.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    gronsfeld.h
 
 FORMS    += mainwindow.ui
