@@ -1,24 +1,35 @@
 #include "gronsfeld.h"
 
-inline void gronsfeld::checkCipherPosition(CipherType::const_iterator& it)
+inline void gronsfeld::checkCipherPosition(CipherKeyType::const_iterator& it)
 {
-	if(m_cipher.cend() == it){
-		it = m_cipher.cbegin();
+	if(m_cipherKey.cend() == it){
+		it = m_cipherKey.cbegin();
 	}
+}
+
+void gronsfeld::performAction(const char* src, char* dst, const int direction)
+{
+	for(auto it = m_cipherKey.cbegin(); *src; ++it){
+		checkCipherPosition(it);
+		/*
+		 * If we caught space key leave it untouched.
+		 * In Unicode cyrillic symbols coded by 2 bytes.
+		 * Skip firt and encode second one. If we encode
+		 * first byte we get garbage in string
+		 */
+		if(*src == ' '){
+			*dst++ = *src++;
+			continue;
+		} else if(*src < 0){
+			*dst++ = *src++;
+		}
+		*dst++ = *src++ + direction * *it;
+	}
+	*dst = *src;
 }
 
 gronsfeld::gronsfeld()
 {
-}
-
-void gronsfeld::setEncodedMessage(const std::string& sourceMessage)
-{
-	m_encodedMessage = sourceMessage;
-}
-
-void gronsfeld::setEncodedMessage(std::string&& sourceMessage)
-{
-	m_encodedMessage = std::move(sourceMessage);
 }
 
 void gronsfeld::setDecodedMessage(const std::string& sourceMessage)
@@ -36,70 +47,90 @@ std::string gronsfeld::getDecodedMessage() const
 	return m_decodedMessage;
 }
 
+void gronsfeld::setEncodedMessage(const std::string& sourceMessage)
+{
+	m_encodedMessage = sourceMessage;
+}
+
+void gronsfeld::setEncodedMessage(std::string&& sourceMessage)
+{
+	m_encodedMessage = std::move(sourceMessage);
+}
+
 std::string gronsfeld::getEncodedMessage() const
 {
 	return m_encodedMessage;
 }
 
-CipherType gronsfeld::getCipher() const
+void  gronsfeld::setCipher(const CipherKeyType& newCipherKey)
 {
-	return m_cipher;
+	m_cipherKey.clear();
+	m_cipherKey = newCipherKey;
+}
+
+void gronsfeld::setCipher(CipherKeyType&& newCipherKey)
+{
+	m_cipherKey.clear();
+	m_cipherKey = std::move(newCipherKey);
+}
+
+CipherKeyType gronsfeld::getCipher() const
+{
+	return m_cipherKey;
 }
 
 bool gronsfeld::encode()
 {
+#ifdef DEBUG
+	std::cerr << "Key:" << std::endl;
+	CipherKeyType::const_iterator it = m_cipherKey.cbegin();
+	const CipherKeyType::const_iterator end = m_cipherKey.cend();
+	for(; it != end; ++it){
+		std::cerr << *it << " ";
+	}
+	std::cerr << std::endl;
+
+	std::cerr << "Message:" << std::endl;
+	std::cerr << m_decodedMessage << std::endl;
+#endif
+
 	m_encodedMessage.clear();
 
 	if(m_decodedMessage.empty())
 		return false;
 
-	const char* symbol = m_decodedMessage.c_str();
+	m_encodedMessage.reserve(m_decodedMessage.size() + 1);
+	const char *src = m_decodedMessage.c_str(),
+			   *dst = m_encodedMessage.c_str();
 
-	for(CipherType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
-		checkCipherPosition(it);
-		/*
-		 * In Unicode cyrillic symbols coded by 2 bytes.
-		 * Skip firt and encode second one. If we encode
-		 * first byte we get garbage in string
-		 */
-		if(*symbol < 0){
-			m_encodedMessage.push_back(*symbol++);
-		}
-		m_encodedMessage.push_back(*symbol++ + *it);
-	}
+	performAction(src, (char*)dst, 1);
 	return true;
 }
 
 bool gronsfeld::decode()
 {
+#ifdef DEBUG
+	std::cerr << "Key:" << std::endl;
+	CipherKeyType::const_iterator it = m_cipherKey.cbegin();
+	const CipherKeyType::const_iterator end = m_cipherKey.cend();
+	for(; it != end; ++it){
+		std::cerr << *it << " ";
+	}
+	std::cerr << std::endl;
+
+	std::cerr << "Message:" << std::endl;
+	std::cerr << m_encodedMessage << std::endl;
+#endif
+
 	m_decodedMessage.clear();
 
 	if(m_encodedMessage.empty())
 		return false;
 
-	const char* symbol = m_encodedMessage.c_str();
+	m_decodedMessage.reserve(m_encodedMessage.size() + 1);
+	const char *src = m_encodedMessage.c_str(),
+			   *dst = m_decodedMessage.c_str();
 
-	for(CipherType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
-		checkCipherPosition(it);
-		/*
-		 * In Unicode cyrillic symbols coded by 2 bytes.
-		 * Skip firt and encode second one. If we encode
-		 * first byte we get garbage in string
-		 */
-		if(*symbol < 0){
-			m_decodedMessage.push_back(*symbol++);
-		}
-		m_decodedMessage.push_back(*symbol++ - *it);
-	}
+	performAction(src, (char*)dst, -1);
 	return true;
-}
-
-void  gronsfeld::setCipher(const CipherType& newCipher)
-{
-	m_cipher = newCipher;
-}
-
-void gronsfeld::setCipher(CipherType&& newCipher)
-{
-	m_cipher = std::move(newCipher);
 }
