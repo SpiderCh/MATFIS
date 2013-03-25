@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include "gronsfeld.h"
+#include "xorcypher.hpp"
 
 namespace Ui {
 	class MainWindow;
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
 		void setButtons();
 
 		gronsfeld m_gsd;
+		xorcypher m_xor;
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
@@ -28,6 +30,9 @@ class MainWindow : public QMainWindow
 	private slots:
 		void gronsfeldEncode();
 		void gronsfeldDecode();
+
+		void XOREncode();
+		void XORDecode();
 };
 
 #endif // MAINWINDOW_H

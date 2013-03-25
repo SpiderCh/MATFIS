@@ -23,6 +23,9 @@
       <height>321</height>
      </rect>
     </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
     <widget class="QWidget" name="GronsfeldTab">
      <attribute name="title">
       <string>Gronsfeld</string>
@@ -128,8 +131,106 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>XOR</string>
      </attribute>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>150</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Encoded message:</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="m_XOREncodedMessage">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>471</width>
+        <height>81</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Decoded message:</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="m_XORDecodedMessage">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>471</width>
+        <height>81</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>30</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Cipher key:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="m_XOREncodeButton">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>120</y>
+        <width>99</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Encode</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="m_XORCipherLine">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>50</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhDigitsOnly|Qt::ImhFormattedNumbersOnly</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="m_XORDecodButton">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>260</y>
+        <width>99</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Decode</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -139,7 +240,7 @@
      <x>0</x>
      <y>0</y>
      <width>692</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

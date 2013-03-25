@@ -22,6 +22,11 @@ void MainWindow::setButtons()
 	 */
 	QObject::connect(ui->m_gronsfeldEncodeButton, SIGNAL(clicked()), this, SLOT(gronsfeldEncode()));
 	QObject::connect(ui->m_gronsfeldDecodButton, SIGNAL(clicked()), this, SLOT(gronsfeldDecode()));
+	/*
+	 * XOR Functions
+	 */
+	QObject::connect(ui->m_XOREncodeButton, SIGNAL(clicked()), this, SLOT(XOREncode()));
+	QObject::connect(ui->m_XORDecodButton, SIGNAL(clicked()), this, SLOT(XORDecode()));
 }
 
 void MainWindow::gronsfeldEncode()
@@ -77,6 +82,52 @@ void MainWindow::gronsfeldDecode()
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
 		ui->m_gronsfeldDecodedMessage->setText(m_gsd.getDecodedMessage().c_str());
+	}
+}
+
+void MainWindow::XOREncode()
+{
+	QString mess = ui->m_XORDecodedMessage->toPlainText();
+#ifdef DEBUG
+	std::cerr << "Plain message:" << std::endl;
+	std::cerr << mess.toStdString() << std::endl;
+#endif
+	m_xor.setDecodedMessage(mess.toStdString());
+	m_xor.setCipher();
+
+	if(!m_xor.encode()){
+		QMessageBox::warning(this, "Error", "Wrong Message Data");
+	} else {
+		ui->m_XOREncodedMessage->setText(m_xor.getEncodedMessage().c_str());
+	}
+	ui->m_XORCipherLine->setText(m_xor.getCipherLine());
+}
+
+void MainWindow::XORDecode()
+{
+	QString str = ui->m_XORCipherLine->text();
+
+	if(!str.size()){
+		QMessageBox::warning(this, "Error", "Wrong Cypher Key");
+		return;
+	}
+
+	std::list<unsigned int> ck;
+	char s;
+	for(size_t i = 0, size = str.size(); size > i; ++i){
+		s = str[i].toAscii();
+		ck.push_back(atoi(&s));
+	}
+
+	m_xor.setCipher(ck);
+
+	QString mess = ui->m_XOREncodedMessage->toPlainText();
+	m_xor.setEncodedMessage(mess.toStdString());
+
+	if(!m_xor.decode()){
+		QMessageBox::warning(this, "Error", "Wrong Message Data");
+	} else {
+		ui->m_XORDecodedMessage->setText(m_xor.getDecodedMessage().c_str());
 	}
 }
 
