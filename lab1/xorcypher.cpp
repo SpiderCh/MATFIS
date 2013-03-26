@@ -74,8 +74,8 @@ bool xorcypher::encode()
 {
 #ifdef DEBUG
 	std::cerr << "Key:" << std::endl;
-	CipherType::const_iterator it = m_cipher.cbegin();
-	const CipherType::const_iterator end = m_cipher.cend();
+	CipherKeyType::const_iterator it = m_cipher.cbegin();
+	const CipherKeyType::const_iterator end = m_cipher.cend();
 	for(; it != end; ++it){
 		std::cerr << *it << " ";
 	}
@@ -148,4 +148,10 @@ void xorcypher::setCipher(CipherKeyType&& newCipherKey)
 {
 	m_cipher.clear();
 	m_cipher = std::move(newCipherKey);
+}
+
+void xorcypher::setCipher(CipherKeyType& newCipherKey)
+{
+	m_cipher.clear();
+	m_cipher = newCipherKey;
 }

@@ -31,6 +31,7 @@ class xorcypher
 
 		void setCipher();
 		void setCipher(CipherKeyType&& newCipherKey);
+		void setCipher(CipherKeyType& newCipherKey);
 
 		std::string getDecodedMessage() const;
 		std::string getEncodedMessage() const;
