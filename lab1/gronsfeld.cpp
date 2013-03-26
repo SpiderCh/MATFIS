@@ -14,7 +14,7 @@ void gronsfeld::performAction(const char* src, char* dst, const int direction)
 		/*
 		 * If we caught space key leave it untouched.
 		 * In Unicode cyrillic symbols coded by 2 bytes.
-		 * Skip firt and encode second one. If we encode
+		 * Skip first and encode second one. If we encode
 		 * first byte we get garbage in string
 		 */
 		if(*src == ' '){

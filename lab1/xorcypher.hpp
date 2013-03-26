@@ -1,6 +1,5 @@
 #ifndef XORCYPHER_HPP
 #define XORCYPHER_HPP
-#include <QString>
 #include <string>
 #include <list>
 
@@ -8,18 +7,17 @@
 #include <iostream>
 #endif
 
-#define CipherKeyType std::list<unsigned int>
+#define XORCipherKeyType std::string
 
 class xorcypher
 {
-		QString alphanum;
+		std::string alphanum;
 		std::string m_decodedMessage;
 		std::string m_encodedMessage;
-		CipherKeyType m_cipher;
-		QString m_cipherLine;
+		XORCipherKeyType m_cipher;
 
-		inline void checkCipherPosition(CipherKeyType::const_iterator& it);
-		QString getRandomString(size_t length);
+		inline void checkCipherPosition(XORCipherKeyType::const_iterator& it);
+		std::string getRandomString(size_t length);
 	public:
 		xorcypher();
 
@@ -30,13 +28,12 @@ class xorcypher
 		void setDecodedMessage(std::string&& sourceMessage);
 
 		void setCipher();
-		void setCipher(CipherKeyType&& newCipherKey);
-		void setCipher(CipherKeyType& newCipherKey);
+		void setCipher(XORCipherKeyType&& newCipherKey);
+		void setCipher(XORCipherKeyType& newCipherKey);
 
 		std::string getDecodedMessage() const;
 		std::string getEncodedMessage() const;
-		CipherKeyType getCipher() const;
-		QString getCipherLine() const;
+		XORCipherKeyType getCipher() const;
 
 		bool encode();
 		bool decode();

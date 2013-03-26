@@ -1,22 +1,26 @@
 #include "xorcypher.hpp"
 
-inline void xorcypher::checkCipherPosition(CipherKeyType::const_iterator& it)
+inline void xorcypher::checkCipherPosition(XORCipherKeyType::const_iterator& it)
 {
 	if(m_cipher.cend() == it){
 		it = m_cipher.cbegin();
 	}
 }
 
-QString xorcypher::getRandomString(size_t length)
+std::string xorcypher::getRandomString(size_t length)
 {
-	QString output;
+	std::string output;
 #ifdef DEBUG
+	std::cerr << "Length of message:" << std::endl;
 	std::cerr << length << std::endl;
 #endif
 	for (size_t i = 0; i < length; ++i) {
-		output += alphanum[rand() % (sizeof(alphanum) - 1)];
+		output += alphanum[rand() % (alphanum.size() - 1)];
 	}
-	output += '\0';
+#ifdef DEBUG
+	std::cerr << "Generated string for cipher:" << std::endl;
+	std::cerr << output << std::endl;
+#endif
 	return output;
 }
 
@@ -60,22 +64,17 @@ std::string xorcypher::getEncodedMessage() const
 	return m_encodedMessage;
 }
 
-CipherKeyType xorcypher::getCipher() const
+XORCipherKeyType xorcypher::getCipher() const
 {
 	return m_cipher;
-}
-
-QString xorcypher::getCipherLine() const
-{
-	return m_cipherLine;
 }
 
 bool xorcypher::encode()
 {
 #ifdef DEBUG
 	std::cerr << "Key:" << std::endl;
-	CipherKeyType::const_iterator it = m_cipher.cbegin();
-	const CipherKeyType::const_iterator end = m_cipher.cend();
+	XORCipherKeyType::const_iterator it = m_cipher.cbegin();
+	const XORCipherKeyType::const_iterator end = m_cipher.cend();
 	for(; it != end; ++it){
 		std::cerr << *it << " ";
 	}
@@ -90,11 +89,11 @@ bool xorcypher::encode()
 		return false;
 	const char* symbol = m_decodedMessage.c_str();
 
-	for(CipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
+	for(XORCipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
 		checkCipherPosition(it);
 		/*
 		 * In Unicode cyrillic symbols coded by 2 bytes.
-		 * Skip firt and encode second one. If we encode
+		 * Skip first and encode second one. If we encode
 		 * first byte we get garbage in string
 		 */
 		if(*symbol < 0){
@@ -114,7 +113,7 @@ bool xorcypher::decode()
 
 	const char* symbol = m_encodedMessage.c_str();
 
-	for(CipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
+	for(XORCipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
 		checkCipherPosition(it);
 		/*
 		 * In Unicode cyrillic symbols coded by 2 bytes.
@@ -136,21 +135,16 @@ void  xorcypher::setCipher()
 	std::cerr << "Length of plain text:" << std::endl;
 	std::cerr << m_decodedMessage.length() << std::endl;
 #endif
-	m_cipherLine = getRandomString(m_decodedMessage.length());
-	char s = 0;
-	for(size_t i = 0, size = m_cipherLine.size(); i < size; i++){
-		s = m_cipherLine[i].toAscii();
-		m_cipher.push_back(atoi(&s));
-	}
+	m_cipher = getRandomString(m_decodedMessage.length());
 }
 
-void xorcypher::setCipher(CipherKeyType&& newCipherKey)
+void xorcypher::setCipher(XORCipherKeyType&& newCipherKey)
 {
 	m_cipher.clear();
 	m_cipher = std::move(newCipherKey);
 }
 
-void xorcypher::setCipher(CipherKeyType& newCipherKey)
+void xorcypher::setCipher(XORCipherKeyType& newCipherKey)
 {
 	m_cipher.clear();
 	m_cipher = newCipherKey;

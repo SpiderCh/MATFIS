@@ -214,9 +214,6 @@
         <height>22</height>
        </rect>
       </property>
-      <property name="inputMethodHints">
-       <set>Qt::ImhDigitsOnly|Qt::ImhFormattedNumbersOnly</set>
-      </property>
      </widget>
      <widget class="QPushButton" name="m_XORDecodButton">
       <property name="geometry">

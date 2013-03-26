@@ -100,7 +100,11 @@ void MainWindow::XOREncode()
 	} else {
 		ui->m_XOREncodedMessage->setText(m_xor.getEncodedMessage().c_str());
 	}
-	ui->m_XORCipherLine->setText(m_xor.getCipherLine());
+#ifdef DEBUG
+	std::cerr << "Cipher: " << std::endl;
+	std::cerr << m_xor.getCipher() << std::endl;
+#endif
+	ui->m_XORCipherLine->setText(m_xor.getCipher().c_str());
 }
 
 void MainWindow::XORDecode()
@@ -112,13 +116,7 @@ void MainWindow::XORDecode()
 		return;
 	}
 
-	std::list<unsigned int> ck;
-	char s;
-	for(size_t i = 0, size = str.size(); size > i; ++i){
-		s = str[i].toAscii();
-		ck.push_back(atoi(&s));
-	}
-
+	std::string ck = str.toStdString();
 	m_xor.setCipher(ck);
 
 	QString mess = ui->m_XOREncodedMessage->toPlainText();
