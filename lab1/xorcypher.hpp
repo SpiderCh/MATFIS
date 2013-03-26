@@ -7,32 +7,32 @@
 #include <iostream>
 #endif
 
-#define XORCipherKeyType std::string
+#define XORCipherKeyType std::wstring
 
 class xorcypher
 {
-		std::string alphanum;
-		std::string m_decodedMessage;
-		std::string m_encodedMessage;
+		std::wstring alphanum;
+		std::wstring m_decodedMessage;
+		std::wstring m_encodedMessage;
 		XORCipherKeyType m_cipher;
 
 		inline void checkCipherPosition(XORCipherKeyType::const_iterator& it);
-		std::string getRandomString(size_t length);
+		std::wstring getRandomString(size_t length);
 	public:
 		xorcypher();
 
-		void setEncodedMessage(const std::string& sourceMessage);
-		void setEncodedMessage(std::string&& sourceMessage);
+		void setEncodedMessage(const std::wstring& sourceMessage);
+		void setEncodedMessage(std::wstring&& sourceMessage);
 
-		void setDecodedMessage(const std::string& sourceMessage);
-		void setDecodedMessage(std::string&& sourceMessage);
+		void setDecodedMessage(const std::wstring& sourceMessage);
+		void setDecodedMessage(std::wstring&& sourceMessage);
 
 		void setCipher();
 		void setCipher(XORCipherKeyType&& newCipherKey);
 		void setCipher(XORCipherKeyType& newCipherKey);
 
-		std::string getDecodedMessage() const;
-		std::string getEncodedMessage() const;
+		std::wstring getDecodedMessage() const;
+		std::wstring getEncodedMessage() const;
 		XORCipherKeyType getCipher() const;
 
 		bool encode();

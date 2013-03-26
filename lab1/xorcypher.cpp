@@ -7,9 +7,9 @@ inline void xorcypher::checkCipherPosition(XORCipherKeyType::const_iterator& it)
 	}
 }
 
-std::string xorcypher::getRandomString(size_t length)
+std::wstring xorcypher::getRandomString(size_t length)
 {
-	std::string output;
+	std::wstring output;
 #ifdef DEBUG
 	std::cerr << "Length of message:" << std::endl;
 	std::cerr << length << std::endl;
@@ -19,7 +19,7 @@ std::string xorcypher::getRandomString(size_t length)
 	}
 #ifdef DEBUG
 	std::cerr << "Generated string for cipher:" << std::endl;
-	std::cerr << output << std::endl;
+	std::cerr << output.c_str() << std::endl;
 #endif
 	return output;
 }
@@ -27,39 +27,39 @@ std::string xorcypher::getRandomString(size_t length)
 xorcypher::xorcypher()
 {
 	alphanum =
-			"0123456789"
+			L"0123456789"
 			"!@#$%^&*"
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			"abcdefghijklmnopqrstuvwxyz";
 }
 
 
-void xorcypher::setEncodedMessage(const std::string& sourceMessage)
+void xorcypher::setEncodedMessage(const std::wstring& sourceMessage)
 {
 	m_encodedMessage = sourceMessage;
 }
 
-void xorcypher::setEncodedMessage(std::string&& sourceMessage)
+void xorcypher::setEncodedMessage(std::wstring&& sourceMessage)
 {
 	m_encodedMessage = std::move(sourceMessage);
 }
 
-void xorcypher::setDecodedMessage(const std::string& sourceMessage)
+void xorcypher::setDecodedMessage(const std::wstring& sourceMessage)
 {
 	m_decodedMessage = sourceMessage;
 }
 
-void xorcypher::setDecodedMessage(std::string&& sourceMessage)
+void xorcypher::setDecodedMessage(std::wstring&& sourceMessage)
 {
 	m_decodedMessage = std::move(sourceMessage);
 }
 
-std::string xorcypher::getDecodedMessage() const
+std::wstring xorcypher::getDecodedMessage() const
 {
 	return m_decodedMessage;
 }
 
-std::string xorcypher::getEncodedMessage() const
+std::wstring xorcypher::getEncodedMessage() const
 {
 	return m_encodedMessage;
 }
@@ -81,13 +81,13 @@ bool xorcypher::encode()
 	std::cerr << std::endl;
 
 	std::cerr << "Message:" << std::endl;
-	std::cerr << m_decodedMessage << std::endl;
+	std::cerr << m_decodedMessage.c_str() << std::endl;
 #endif
 	m_encodedMessage.clear();
 
 	if(m_decodedMessage.empty())
 		return false;
-	const char* symbol = m_decodedMessage.c_str();
+	const wchar_t* symbol = m_decodedMessage.c_str();
 
 	for(XORCipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
 		checkCipherPosition(it);
@@ -97,6 +97,10 @@ bool xorcypher::encode()
 		 * first byte we get garbage in string
 		 */
 		if(*symbol < 0){
+#ifdef DEBUG
+			std::cerr << "Negative symbol: " << std::endl;
+			std::cerr << *symbol << std::endl;
+#endif
 			m_encodedMessage.push_back(*symbol++);
 		}
 		m_encodedMessage.push_back(*symbol++ ^ *it);
@@ -111,7 +115,7 @@ bool xorcypher::decode()
 	if(m_encodedMessage.empty())
 		return false;
 
-	const char* symbol = m_encodedMessage.c_str();
+	const wchar_t* symbol = m_encodedMessage.c_str();
 
 	for(XORCipherKeyType::const_iterator it = m_cipher.cbegin(); *symbol; ++it){
 		checkCipherPosition(it);

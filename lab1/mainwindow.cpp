@@ -92,19 +92,19 @@ void MainWindow::XOREncode()
 	std::cerr << "Plain message:" << std::endl;
 	std::cerr << mess.toStdString() << std::endl;
 #endif
-	m_xor.setDecodedMessage(mess.toStdString());
+	m_xor.setDecodedMessage(mess.toStdWString());
 	m_xor.setCipher();
 
 	if(!m_xor.encode()){
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
-		ui->m_XOREncodedMessage->setText(m_xor.getEncodedMessage().c_str());
+		ui->m_XOREncodedMessage->setText(QString::fromStdWString(m_xor.getEncodedMessage()));
 	}
 #ifdef DEBUG
-	std::cerr << "Cipher: " << std::endl;
-	std::cerr << m_xor.getCipher() << std::endl;
+//	std::cerr << "Cipher: " << std::endl;
+//	std::cerr << m_xor.getCipher() << std::endl;
 #endif
-	ui->m_XORCipherLine->setText(m_xor.getCipher().c_str());
+	ui->m_XORCipherLine->setText(QString::fromStdWString(m_xor.getCipher()));
 }
 
 void MainWindow::XORDecode()
@@ -116,16 +116,16 @@ void MainWindow::XORDecode()
 		return;
 	}
 
-	std::string ck = str.toStdString();
+	std::wstring ck = str.toStdWString();
 	m_xor.setCipher(ck);
 
 	QString mess = ui->m_XOREncodedMessage->toPlainText();
-	m_xor.setEncodedMessage(mess.toStdString());
+	m_xor.setEncodedMessage(mess.toStdWString());
 
 	if(!m_xor.decode()){
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
-		ui->m_XORDecodedMessage->setText(m_xor.getDecodedMessage().c_str());
+		ui->m_XORDecodedMessage->setText(QString::fromStdWString(m_xor.getDecodedMessage()));
 	}
 }
 
