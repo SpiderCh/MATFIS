@@ -7,7 +7,7 @@ inline void gronsfeld::checkCipherPosition(CipherKeyType::const_iterator& it)
 	}
 }
 
-void gronsfeld::performAction(const char* src, char* dst, const int direction)
+void gronsfeld::performAction(const wchar_t* src, wchar_t* dst, const int direction)
 {
 	for(auto it = m_cipherKey.cbegin(); *src; ++it){
 		checkCipherPosition(it);
@@ -32,32 +32,56 @@ gronsfeld::gronsfeld()
 {
 }
 
-void gronsfeld::setDecodedMessage(const std::string& sourceMessage)
+void gronsfeld::setEncodedMessage(const wchar_t* message)
+{
+	m_encodedMessage = message;
+}
+
+void gronsfeld::setDecodedMessage(const wchar_t* message)
+{
+	m_decodedMessage = message;
+}
+
+void gronsfeld::setDecodedMessage(const std::wstring& sourceMessage)
 {
 	m_decodedMessage = sourceMessage;
+#ifdef DEBUG
+	std::cerr << m_decodedMessage << std::endl;
+	for(size_t i =0; i != m_decodedMessage.size(); ++i){
+		std::cerr << (int)m_decodedMessage[i] << " ";
+	}
+	std::cerr << std::endl;
+#endif
 }
 
-void gronsfeld::setDecodedMessage(std::string&& sourceMessage)
+void gronsfeld::setDecodedMessage(std::wstring&& sourceMessage)
 {
 	m_decodedMessage = std::move(sourceMessage);
+#ifdef DEBUG
+	std::cerr << m_decodedMessage << std::endl;
+	for(size_t i =0; i != m_decodedMessage.size(); ++i){
+		std::cerr << (int)m_decodedMessage[i] << " ";
+	}
+	std::cerr << std::endl;
+#endif
 }
 
-std::string gronsfeld::getDecodedMessage() const
+std::wstring gronsfeld::getDecodedMessage() const
 {
 	return m_decodedMessage;
 }
 
-void gronsfeld::setEncodedMessage(const std::string& sourceMessage)
+void gronsfeld::setEncodedMessage(const std::wstring& sourceMessage)
 {
 	m_encodedMessage = sourceMessage;
 }
 
-void gronsfeld::setEncodedMessage(std::string&& sourceMessage)
+void gronsfeld::setEncodedMessage(std::wstring&& sourceMessage)
 {
 	m_encodedMessage = std::move(sourceMessage);
 }
 
-std::string gronsfeld::getEncodedMessage() const
+std::wstring gronsfeld::getEncodedMessage() const
 {
 	return m_encodedMessage;
 }
@@ -100,10 +124,10 @@ bool gronsfeld::encode()
 		return false;
 
 	m_encodedMessage.reserve(m_decodedMessage.size() + 1);
-	const char *src = m_decodedMessage.c_str(),
-			   *dst = m_encodedMessage.c_str();
+	const wchar_t *src = m_decodedMessage.c_str(),
+				  *dst = m_encodedMessage.c_str();
 
-	performAction(src, (char*)dst, 1);
+	performAction(src, (wchar_t*)dst, 1);
 	return true;
 }
 
@@ -128,9 +152,9 @@ bool gronsfeld::decode()
 		return false;
 
 	m_decodedMessage.reserve(m_encodedMessage.size() + 1);
-	const char *src = m_encodedMessage.c_str(),
+	const wchar_t *src = m_encodedMessage.c_str(),
 			   *dst = m_decodedMessage.c_str();
 
-	performAction(src, (char*)dst, -1);
+	performAction(src, (wchar_t*)dst, -1);
 	return true;
 }

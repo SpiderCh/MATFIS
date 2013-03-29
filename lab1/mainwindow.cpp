@@ -48,12 +48,12 @@ void MainWindow::gronsfeldEncode()
 	m_gsd.setCipher(ck);
 
 	QString mess = ui->m_gronsfeldDecodedMessage->toPlainText();
-	m_gsd.setDecodedMessage(mess.toStdString());
+	m_gsd.setDecodedMessage(mess.toStdWString());
 
 	if(!m_gsd.encode()){
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
-		ui->m_gronsfeldEncodedMessage->setText(m_gsd.getEncodedMessage().c_str());
+		ui->m_gronsfeldEncodedMessage->setText(QString::fromWCharArray(m_gsd.getEncodedMessage().c_str()));
 	}
 }
 
@@ -76,12 +76,12 @@ void MainWindow::gronsfeldDecode()
 	m_gsd.setCipher(ck);
 
 	QString mess = ui->m_gronsfeldEncodedMessage->toPlainText();
-	m_gsd.setEncodedMessage(mess.toStdString());
+	m_gsd.setEncodedMessage(mess.toStdWString());
 
 	if(!m_gsd.decode()){
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
-		ui->m_gronsfeldDecodedMessage->setText(m_gsd.getDecodedMessage().c_str());
+		ui->m_gronsfeldDecodedMessage->setText(QString::fromWCharArray(m_gsd.getDecodedMessage().c_str()));
 	}
 }
 
