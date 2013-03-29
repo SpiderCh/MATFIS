@@ -125,7 +125,7 @@ void MainWindow::XORDecode()
 	if(!m_xor.decode()){
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
-		ui->m_XORDecodedMessage->setText(QString::fromStdWString(m_xor.getDecodedMessage()));
+		ui->m_XORDecodedMessage->append(QString::fromStdWString(m_xor.getDecodedMessage()));
 	}
 }
 
