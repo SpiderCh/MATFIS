@@ -10,7 +10,7 @@ QMAKE_CXXFLAGS += -O2 -Wall -Wextra -pedantic
 
 QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.7
 
-#QMAKE_CXXFLAGS += -DDEBUG
+QMAKE_CXXFLAGS += -DDEBUG
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,10 +21,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     gronsfeld.cpp \
-    xorcypher.cpp
+    xorcypher.cpp \
+    elgamal.cpp
 
 HEADERS  += mainwindow.h \
     gronsfeld.h \
-    xorcypher.hpp
+    xorcypher.hpp \
+    elgamal.hpp
 
 FORMS    += mainwindow.ui

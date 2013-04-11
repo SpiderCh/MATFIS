@@ -9,6 +9,7 @@
 
 #include "gronsfeld.h"
 #include "xorcypher.hpp"
+#include "elgamal.hpp"
 
 namespace Ui {
 	class MainWindow;
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 
 		gronsfeld m_gsd;
 		xorcypher m_xor;
+		ElGamal m_elgamal;
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
@@ -33,6 +35,9 @@ class MainWindow : public QMainWindow
 
 		void XOREncode();
 		void XORDecode();
+
+		void elgamalEncode();
+		void elgamalDecode();
 };
 
 #endif // MAINWINDOW_H

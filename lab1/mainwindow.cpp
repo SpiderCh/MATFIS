@@ -27,6 +27,11 @@ void MainWindow::setButtons()
 	 */
 	QObject::connect(ui->m_XOREncodeButton, SIGNAL(clicked()), this, SLOT(XOREncode()));
 	QObject::connect(ui->m_XORDecodButton, SIGNAL(clicked()), this, SLOT(XORDecode()));
+	/*
+	 * ElGamal Functions
+	 */
+	QObject::connect(ui->m_elGamalEncodeButton, SIGNAL(clicked()), this, SLOT(elgamalEncode()));
+	QObject::connect(ui->m_elGamalDecodButton, SIGNAL(clicked()), this, SLOT(elgamalDecode()));
 }
 
 void MainWindow::gronsfeldEncode()
@@ -126,6 +131,52 @@ void MainWindow::XORDecode()
 		QMessageBox::warning(this, "Error", "Wrong Message Data");
 	} else {
 		ui->m_XORDecodedMessage->append(QString::fromStdWString(m_xor.getDecodedMessage()));
+	}
+}
+
+void MainWindow::elgamalEncode()
+{
+	QString str = ui->m_elGamalPLine->text();
+	if(!str.size()){
+		QMessageBox::warning(this, "Error", "Wrong P");
+		return;
+	}
+	m_elgamal.setP(str.toInt());
+	str = ui->m_elGamalGLine->text();
+	if(!str.size()){
+		QMessageBox::warning(this, "Error", "Wrong G");
+		return;
+	}
+	m_elgamal.setG(str.toInt());
+	str = ui->m_elGamalDecodedMessage->toPlainText();
+	m_elgamal.setDecodedMessage(str.toStdWString());
+	if(!m_elgamal.encode()){
+		QMessageBox::warning(this, "Error", "Wrong Message Data");
+	} else {
+		ui->m_elGamalEncodedMessage->setText(QString::fromStdWString(m_elgamal.getEncodedMessage()));
+	}
+}
+
+void MainWindow::elgamalDecode()
+{
+	QString str = ui->m_elGamalPLine->text();
+	if(!str.size()){
+		QMessageBox::warning(this, "Error", "Wrong P");
+		return;
+	}
+	m_elgamal.setP(str.toInt());
+	str = ui->m_elGamalGLine->text();
+	if(!str.size()){
+		QMessageBox::warning(this, "Error", "Wrong G");
+		return;
+	}
+	m_elgamal.setG(str.toInt());
+	str = ui->m_elGamalEncodedMessage->toPlainText();
+	m_elgamal.setEncodedMessage(str.toStdWString());
+	if(!m_elgamal.decode()){
+		QMessageBox::warning(this, "Error", "Wrong Message Data");
+	} else {
+		ui->m_elGamalDecodedMessage->append(QString::fromStdWString(m_elgamal.getDecodedMessage()));
 	}
 }
 
