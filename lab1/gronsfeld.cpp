@@ -46,7 +46,7 @@ void gronsfeld::setDecodedMessage(const std::wstring& sourceMessage)
 {
 	m_decodedMessage = sourceMessage;
 #ifdef DEBUG
-	std::cerr << m_decodedMessage << std::endl;
+	std::cerr << m_decodedMessage.c_str() << std::endl;
 	for(size_t i =0; i != m_decodedMessage.size(); ++i){
 		std::cerr << (int)m_decodedMessage[i] << " ";
 	}
@@ -58,7 +58,7 @@ void gronsfeld::setDecodedMessage(std::wstring&& sourceMessage)
 {
 	m_decodedMessage = std::move(sourceMessage);
 #ifdef DEBUG
-	std::cerr << m_decodedMessage << std::endl;
+	std::cerr << m_decodedMessage.c_str() << std::endl;
 	for(size_t i =0; i != m_decodedMessage.size(); ++i){
 		std::cerr << (int)m_decodedMessage[i] << " ";
 	}
@@ -115,7 +115,7 @@ bool gronsfeld::encode()
 	std::cerr << std::endl;
 
 	std::cerr << "Message:" << std::endl;
-	std::cerr << m_decodedMessage << std::endl;
+	std::cerr << m_decodedMessage.c_str() << std::endl;
 #endif
 
 	m_encodedMessage.clear();
@@ -143,7 +143,7 @@ bool gronsfeld::decode()
 	std::cerr << std::endl;
 
 	std::cerr << "Message:" << std::endl;
-	std::cerr << m_encodedMessage << std::endl;
+	std::cerr << m_encodedMessage.c_str() << std::endl;
 #endif
 
 	m_decodedMessage.clear();

@@ -10,6 +10,8 @@
 #include "gronsfeld.h"
 #include "xorcypher.hpp"
 #include "elgamal.hpp"
+#include "rsa.h"
+#include "utils.h"
 
 namespace Ui {
 	class MainWindow;
@@ -25,6 +27,7 @@ class MainWindow : public QMainWindow
 		gronsfeld m_gsd;
 		xorcypher m_xor;
 		ElGamal m_elgamal;
+		RSA m_rsa;
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
@@ -38,6 +41,9 @@ class MainWindow : public QMainWindow
 
 		void elgamalEncode();
 		void elgamalDecode();
+
+		void RSAEncode();
+		void RSADecode();
 };
 
 #endif // MAINWINDOW_H

@@ -3,7 +3,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::MainWindow),
+	m_rsa()
 {
 	ui->setupUi(this);
 	initTabs();
@@ -32,6 +33,11 @@ void MainWindow::setButtons()
 	 */
 	QObject::connect(ui->m_elGamalEncodeButton, SIGNAL(clicked()), this, SLOT(elgamalEncode()));
 	QObject::connect(ui->m_elGamalDecodButton, SIGNAL(clicked()), this, SLOT(elgamalDecode()));
+	/*
+	 * RSA Functions
+	 */
+	QObject::connect(ui->m_RSAEncode, SIGNAL(clicked()), this, SLOT(RSAEncode()));
+	QObject::connect(ui->m_RSADecode, SIGNAL(clicked()), this, SLOT(RSADecode()));
 }
 
 void MainWindow::gronsfeldEncode()
@@ -180,10 +186,46 @@ void MainWindow::elgamalDecode()
 	}
 }
 
+void MainWindow::RSAEncode()
+{
+	std::string message = ui->m_RSAMessage->toPlainText().toStdString();
+	m_rsa.setMessage(message);
+	m_rsa.encode();
+	std::list<types::ull> res = m_rsa.getEncodedMessage();
+	QString result;
+	for(auto it: res){
+		result += QString::number(it);
+	}
+
+	ui->m_RSAEncoded->setText(result);
+	ui->m_RSADecode->setEnabled(true);
+}
+
+void MainWindow::RSADecode()
+{
+	m_rsa.decode();
+	std::string result = m_rsa.getDecodedMessage();
+
+	ui->m_RSADecoded->setText(QString(result.c_str()));
+}
+
 
 void MainWindow::initTabs()
 {
+	ui->m_RSADecode->setEnabled(false);
 	ui->m_gronsfeldCipherLine->setValidator(new QIntValidator(0, std::numeric_limits<int>::max(), this));
+	std::pair<types::ull, types::ull> publicKey = m_rsa.getPublicKey();
+	std::pair<types::ull, types::ull> privateKey = m_rsa.getPrivateKey();
+	std::pair<types::ull, types::ull> pq = m_rsa.getPQ();
+
+	ui->m_pLine->setText(QString::number(pq.first));
+	ui->m_qLine->setText(QString::number(pq.second));
+
+	ui->m_eLine->setText(QString::number(publicKey.first));
+	ui->m_nLine->setText(QString::number(publicKey.second));
+
+	ui->m_dLine->setText(QString::number(privateKey.first));
+	ui->m_nLine_2->setText(QString::number(privateKey.second));
 
 	setButtons();
 }

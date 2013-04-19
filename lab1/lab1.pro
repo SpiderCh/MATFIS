@@ -6,9 +6,9 @@
 
 QT       += core gui
 
-QMAKE_CXXFLAGS += -O2 -Wall -Wextra -pedantic
+QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
 
-QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.7
+QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.6
 
 QMAKE_CXXFLAGS += -DDEBUG
 
@@ -22,11 +22,21 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     gronsfeld.cpp \
     xorcypher.cpp \
-    elgamal.cpp
+    elgamal.cpp \
+    rsaencrypt.cpp \
+    rsadecrypt.cpp \
+    rsagenerate.cpp \
+    rsa.cpp \
+    utils.cpp
 
 HEADERS  += mainwindow.h \
     gronsfeld.h \
     xorcypher.hpp \
-    elgamal.hpp
+    elgamal.hpp \
+    rsaencrypt.h \
+    rsadecrypt.h \
+    rsagenerate.h \
+    rsa.h \
+    utils.h
 
 FORMS    += mainwindow.ui
