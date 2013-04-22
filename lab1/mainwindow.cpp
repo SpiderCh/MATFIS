@@ -3,10 +3,15 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow),
-	m_rsa()
+	ui(new Ui::MainWindow)
+	//m_rsa()
 {
 	ui->setupUi(this);
+	m_report.push_back("../report/part1.png");
+	m_report.push_back("../report/part2.png");
+	m_report.push_back("../report/part3.png");
+	m_report.push_back("../report/part4.png");
+	m_rit = m_report.begin();
 	initTabs();
 }
 
@@ -38,6 +43,9 @@ void MainWindow::setButtons()
 	 */
 	QObject::connect(ui->m_RSAEncode, SIGNAL(clicked()), this, SLOT(RSAEncode()));
 	QObject::connect(ui->m_RSADecode, SIGNAL(clicked()), this, SLOT(RSADecode()));
+
+	QObject::connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(next()));
+	QObject::connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(prev()));
 }
 
 void MainWindow::gronsfeldEncode()
@@ -209,6 +217,27 @@ void MainWindow::RSADecode()
 	ui->m_RSADecoded->setText(QString(result.c_str()));
 }
 
+void MainWindow::next()
+{
+	++m_rit;
+	if(m_rit == m_report.end()) {
+		--m_rit;
+		return;
+	}
+	m_image.load(*m_rit);
+	m_image = m_image.scaled(910,641);
+	ui->m_image->setPixmap(QPixmap::fromImage(m_image));
+}
+
+void MainWindow::prev()
+{
+	if(m_rit == m_report.begin()) return;
+	--m_rit;
+	m_image.load(*m_rit);
+	m_image = m_image.scaled(910,641);
+	ui->m_image->setPixmap(QPixmap::fromImage(m_image));
+}
+
 
 void MainWindow::initTabs()
 {
@@ -226,6 +255,17 @@ void MainWindow::initTabs()
 
 	ui->m_dLine->setText(QString::number(privateKey.first));
 	ui->m_nLine_2->setText(QString::number(privateKey.second));
+
+	m_image.load(*m_rit);
+	m_image = m_image.scaled(910,641);
+	ui->m_image->setPixmap(QPixmap::fromImage(m_image));
+
+	/*m_document = Poppler::Document::load("../report/report.pdf");
+	assert(m_document || !m_document->isLocked());
+	Poppler::Page *pdfPage = m_document->page(1);
+	assert(!pdfPage);
+	m_image = pdfPage->renderToImage(0, 0, 0, 0, 910, 741);
+	ui->m_image->setPixmap(QPixmap::fromImage(m_image));*/
 
 	setButtons();
 }

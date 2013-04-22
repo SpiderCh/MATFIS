@@ -6,7 +6,9 @@
 
 QT       += core gui
 
-QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
+QMAKE_CXXFLAGS += -Wall -Wextra -pedantic -lpoppler-qt4
+
+LIBS += -L/usr/local/lib -lpoppler -lpoppler-qt4
 
 QMAKE_CXXFLAGS += -std=c++0x #For GCC-4.6
 

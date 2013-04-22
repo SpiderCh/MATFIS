@@ -6,6 +6,8 @@
 #include <QString>
 #include <limits>
 #include <cmath>
+#include <QImage>
+#include <QStringList>
 
 #include "gronsfeld.h"
 #include "xorcypher.hpp"
@@ -23,11 +25,13 @@ class MainWindow : public QMainWindow
 		Ui::MainWindow *ui;
 		void initTabs();
 		void setButtons();
-
+		QImage m_image;
 		gronsfeld m_gsd;
 		xorcypher m_xor;
 		ElGamal m_elgamal;
 		RSA m_rsa;
+		QStringList m_report;
+		QStringList::Iterator m_rit;
 	public:
 		explicit MainWindow(QWidget *parent = 0);
 		~MainWindow();
@@ -44,6 +48,9 @@ class MainWindow : public QMainWindow
 
 		void RSAEncode();
 		void RSADecode();
+
+		void next();
+		void prev();
 };
 
 #endif // MAINWINDOW_H
